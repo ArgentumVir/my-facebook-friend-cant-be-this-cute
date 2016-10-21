@@ -24,7 +24,8 @@
 	},
 	"permissions": [
 		"contentSettings",
-		"tabs"
+		"tabs",
+		"webRequests"
 	],
 	"content_scripts": [
 		{
@@ -32,7 +33,7 @@
 				"*://www.facebook.com/*"
 			],
 			"css": [
-				"src/inject/inject.css"
+				"css/hide.css"
 			],
 			"run_at": "document_start"
 		},
@@ -48,6 +49,7 @@
 	],
 	"web_accessible_resources": [
 		"images/*",
-		"js/main.js"
+		"js/main.js",
+		"data/*"
 	]
 }
