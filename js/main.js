@@ -4,10 +4,23 @@
 'use strict'
 
 document.addEventListener('DOMContentLoaded', function(event) {
+	setupAddSection();
 	setupTrendSection();
 });
 
 
+// Class names
+const USER_CONTENT_CLASS = '_4ikz';
+const USER_CONTENT_TEXT_CLASS = '_5pbx userContent'; // The <P> within it is the actual text
+const VIDEO_PARENT_CLASS = '_53j5';
+const COMMENTS_HOLDER_CLASS = '_3b-9';
+const USER_CONTENT_IMAGE_CLASS = '_4-eo';
+const RIGHT_COL_ADDS_CLASS = 'ego_unit';
+
+
+function setupAddSection() {
+
+}
 
 function setupTrendSection() {
 	// Class names
@@ -68,7 +81,8 @@ function setupTrendSection() {
 
 	// helper function
 	function generateTrend() {
-		// Fuck this is ugly lol
+		// On one hand, this is super ugly
+		// On the other hand inner html modifications has the fastest performance
 		const ARROW_PICTURE = `https://www.facebook.com/rsrc.php/v3/y4/r/-PAXP-deijE.gif`;
 		const ARROW = `<img class="_3uz0 _5r-z _8o lfloat _ohe img" alt="" src="${ARROW_PICTURE}">`;
 		const HIDE_TREND = `<div class="_18dr rfloat _ohf">\

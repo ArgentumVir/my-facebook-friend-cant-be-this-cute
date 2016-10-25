@@ -1,48 +1,103 @@
 'use strict'
 const BUCKET = 'https://s3-us-west-2.amazonaws.com/my-facebook-friend-cant-be-this-cute';
+const TOTAL_PICTURES = 2;
 
-https://s3-us-west-2.amazonaws.com/my-facebook-friend-cant-be-this-cute/data/top100.txt
-
-// Test code
-/*
-function getRandomPictureURL() {
-	const script = document.createElement('img');
-	script.src = 'https://s3-us-west-2.amazonaws.com/my-facebook-friend-cant-be-this-cute/pics/general/0.jpg';
-	script.id = 'yolo';
-	script.height = '800';
-	script.width = '1000';
-	// script.alt = '1';
-	//chrome.extension.getURL('js/main.js')
-	document.getElementById('pagelet_bluebar').appendChild(script);
-}
-*/
 
 document.addEventListener('DOMContentLoaded', function(event) {
-
-	getPopularAnime().then((anime) => {
-		const top100Shows = anime.split('\n');
-		setupTrendSection(top100Shows);
-	});
+	setupTrendSection();
+	setupUserContent();
+	setupAddSection();
 });
+// Make a seperate area for profile pictures
+function setupUserContent() {
+	// Class names
+	const USER_CONTENT_CLASS = '_4ikz';
+	const USER_CONTENT_TEXT_CLASS = '_5pbx userContent'; // The <P> within it is the actual text
+	const VIDEO_PARENT_CLASS = '_53j5';
+	const COMMENTS_HOLDER_CLASS = '_3b-9';
+	// const USER_CONTENT_IMAGE_CLASS = '_4-eo';
 
-function getPopularAnime() {
+	const USER_CONTENT_IMAGE_CLASS = '_44ma';
 
-	let promise = new Promise((resolve, reject) => {
+	let userPictures = document.getElementsByClassName(USER_CONTENT_IMAGE_CLASS);
+	console.log(userPictures.length);
+	for (let i = 0; i < userPictures.length; i++) {
+		let pictureNumber = Math.floor(Math.random() * TOTAL_PICTURES);
+		let addPicture = `https://s3-us-west-2.amazonaws.com/my-facebook-friend-cant-be-this-cute/pics/general/${pictureNumber}.jpg`;
+		userPictures[i].src = addPicture;
+		console.log(userPictures[i]);
+		console.log('SANITY CHECK@@@@');
+	}
 
-		const xmlHttp = new XMLHttpRequest();
-		xmlHttp.onreadystatechange = () => {
-			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {	resolve(xmlHttp.responseText);	}
-		}
+	function replaceTopVideo () {
+			//let parent = document.getElementsByClassName(VIDEO_PARENT_CLASS);
+			//let videoContainer = parent.getElementsByTagName('img');
+			let video = document.getElementById('u_ps_0_0_k');
+			console.log(video.innerHTML);
+	}
 
-		xmlHttp.open('GET', `${BUCKET}/data/top100.txt`, true); // false for synchronous request
-		xmlHttp.send(null);
-	});
-	return promise;
 }
 
+// Refactor and clean up
+function setupAddSection() {
+	const RIGHT_COL_ADDS_CLASS = 'ego_unit';
+	const RIGHT_COL_ADD_CONTAINER_CLASS = 'ego_section';
+	const RIGHT_COL_ADDS_LINK_PARENT_CLASS = 'v_1pp_is6in0';
+	const RIGHT_COL_ADDS_IMG_GRANDPARENT_CLASS = 'p_1pp_is24-n';
 
-function setupTrendSection(top100Shows) {
-	generateTrend.shows = top100Shows;
+	const RIGHT_COL_ADDS_TEXT_BODY_CLASS = 'g_1pp_is24ze';
+	const RIGHT_COL_ADDS_LINK_TEXT_CLASS = 's_1pp_is24-p';
+	const RIGHT_COL_ADDS_TEXT_TITLE_CLASS = 'd_1pp_is24-q';
+
+	// scaledImageFitHeight img
+
+	let addTextTitles = document.getElementsByClassName(RIGHT_COL_ADDS_TEXT_TITLE_CLASS);
+	let addTextLinks = document.getElementsByClassName(RIGHT_COL_ADDS_LINK_TEXT_CLASS);
+	let addTextBodies = document.getElementsByClassName(RIGHT_COL_ADDS_TEXT_BODY_CLASS);
+
+
+	let newBodyText = `It's not like I want to be on your homepage b-baka...`;
+	let newLinkText = 'https://myanimelist.net/';
+	let newTitleText = `What're you looking at?`;
+
+		for (let i = 0; i < addTextTitles.length; i++) {
+			addTextTitles[i].innerHTML = `<strong>${newTitleText}</strong>`;
+			addTextLinks[i].innerHTML = newLinkText;
+			addTextBodies[i].innerHTML = newBodyText;
+		}
+
+
+	let adds = document.getElementsByClassName(RIGHT_COL_ADDS_IMG_GRANDPARENT_CLASS);
+	let addLinks = document.getElementsByClassName(RIGHT_COL_ADDS_LINK_PARENT_CLASS);
+	let link = null;
+
+	// Changes the link to just Facebook for now, actually change later
+	for (let i = 0; i < addLinks.length; i++) {
+		link = addLinks[i].getElementsByTagName('a')[1];
+		link.href = '';
+	}
+
+	for (let i = 0; i < adds.length; i++) {
+		let pictureNumber = Math.floor(Math.random() * TOTAL_PICTURES);
+		let addPicture = `https://s3-us-west-2.amazonaws.com/my-facebook-friend-cant-be-this-cute/pics/general/${pictureNumber}.jpg`;
+		let singleAdd =`
+		<div class="uiScaledImageContainer" style="width:284px;height:149px;">
+		<img class="scaledImageFitHeight img" src="${addPicture}" style="left:0px;" alt="" width="285" height="149">
+		</div>`;
+		adds[i].innerHTML = singleAdd;
+	}
+	// showRightColAdds();
+
+	// wtf breaks half the time, possible race condition
+	function showRightColAdds() {
+		let test = document.getElementsByClassName(RIGHT_COL_ADD_CONTAINER_CLASS);
+		console.log(test);
+		document.getElementsByClassName(RIGHT_COL_ADD_CONTAINER_CLASS)[0].style.display = 'block';
+	}
+
+}
+
+function setupTrendSection() {
 	// Class names
 	const ALL_TRENDS_CONTAINER_CLASS = '_5myl';
 	const SINGLE_TREND_CONTAINER_CLASS = '_5my2 _3uz4';
@@ -51,10 +106,13 @@ function setupTrendSection(top100Shows) {
 	//const SEE_MORE = 'u_ps_0_4_5';
 	const SEE_MORE_TRENDS_ID = 'u_ps_0_4_6';
 
-	// Trends are hidden by default in CSS to ensure we change the text before the user sees it
-	modifyInitialTrends();
-	showTrends();
-	setupShowMoreButton();
+	getPopularAnime().then((anime) => {
+		generateTrend.shows = anime.split('\n');
+		// Trends are hidden by default in CSS to ensure we change the text before the user sees it
+		modifyInitialTrends();
+		// showTrends();
+		setupShowMoreButton();
+	});
 
 	function modifyInitialTrends() {
 		const initialTrends = document.getElementsByClassName(TREND_CLASS);
@@ -168,4 +226,19 @@ function setupTrendSection(top100Shows) {
 
 
 	}
+}
+
+function getPopularAnime() {
+
+	let promise = new Promise((resolve, reject) => {
+
+		const xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = () => {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {	resolve(xmlHttp.responseText);	}
+		}
+
+		xmlHttp.open('GET', `${BUCKET}/data/top100.txt`, true); // false for synchronous request
+		xmlHttp.send(null);
+	});
+	return promise;
 }
