@@ -1,8 +1,13 @@
+
+// Maybe just write in injector???
+
 'use strict'
 
 document.addEventListener('DOMContentLoaded', function(event) {
 	setupTrendSection();
 });
+
+
 
 function setupTrendSection() {
 	// Class names
